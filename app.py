@@ -1,24 +1,19 @@
 import streamlit as st
 import requests
+import uuid
 
 ENDPOINT_URL = "https://pz8ly572of.execute-api.us-east-1.amazonaws.com/chat"
 
 st.title("💬 Chatbot")
 
-models = {
-    "claude-v3-5-sonnet": "anthropic.claude-3-5-sonnet-20240620-v1:0",
-    "claude-v3-haiku": "anthropic.claude-3-haiku-20240307-v1:0",
-}
+# Definir o modelo fixo
+chosen_model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"
 
-model_id_options = list(models.keys())
+# Gerar um UUID único para o cliente
+if "customer_id" not in st.session_state:
+    st.session_state["customer_id"] = str(uuid.uuid4())
 
-selected_model_id = st.selectbox("Modelo", model_id_options)
-
-# Obter o modelo selecionado
-chosen_model_id = models[selected_model_id]
-
-# Campo de entrada para CustomerId
-customer_id = st.text_input("ID do Cliente")
+customer_id = st.session_state["customer_id"]
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
@@ -37,7 +32,7 @@ if prompt := st.chat_input():
     # Preparar os dados da solicitação
     request_data = {
         "Question": prompt,  # A questão é o que o usuário digitou
-        "CustomerId": customer_id,  # Usar o ID do cliente inserido
+        "CustomerId": customer_id,  # Usar o ID do cliente gerado automaticamente
     }
 
     print('request_data', request_data)
