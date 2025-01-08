@@ -46,13 +46,20 @@ if prompt := st.chat_input():
             print("RESPONSE: ", response_data)
 
             # Extrair o campo "output" da resposta
-            response_text = response_data.get("output", "Resposta não encontrada.")
+            response_output = response_data.get("output", {})
+
+            response_text = response_output.get("question", "Resposta não encontrada.")
+
+            response_type = response_output.get("type", "Tipo não especificado")
+
+            # Formatar a resposta para incluir o tipo
+            formatted_response = f"[{response_type}] | {response_text}"
 
             # Adicionar a resposta ao histórico de mensagens
             st.session_state.messages.append(
-                {"role": "assistant", "content": response_text}
+                {"role": "assistant", "content": formatted_response}
             )
-            st.chat_message("assistant").write(response_text)
+            st.chat_message("assistant").write(formatted_response)
 
             print(f"Response data: {response_data}")
         else:
