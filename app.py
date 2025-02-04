@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import uuid
+import json
 
 ENDPOINT_URL = "https://pz8ly572of.execute-api.us-east-1.amazonaws.com/chat"
 
@@ -23,6 +24,20 @@ if "messages" not in st.session_state:
 # Exibir mensagens anteriores
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
+
+# Criar uma aba para copiar JSON
+with st.sidebar:
+    st.header("Copiar JSON")
+    retirada_data = json.dumps({"tipo_retirada": "bairro", "ref_retirada": "reboucas", "cid_retirada": 6015}, indent=4)
+    devolucao_data = json.dumps({"tipo_devolucao": "aeroporto", "ref_devolucao": 9, "cid_devolucao": 8452}, indent=4)
+    
+    if st.button("Copiar LOCAL_RETIRADA"):
+        st.session_state["copied_json"] = retirada_data
+    if st.button("Copiar LOCAL_DEVOLUCAO"):
+        st.session_state["copied_json"] = devolucao_data
+    
+    if "copied_json" in st.session_state:
+        st.code(st.session_state["copied_json"], language="json")
 
 # Aguardar a entrada do usuário
 if prompt := st.chat_input():
@@ -49,7 +64,6 @@ if prompt := st.chat_input():
             response_output = response_data.get("output", {})
 
             response_text = response_output.get("question", "Resposta não encontrada.")
-
             response_type = response_output.get("type", "Tipo não especificado")
 
             # Formatar a resposta para incluir o tipo
