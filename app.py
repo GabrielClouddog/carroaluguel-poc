@@ -3,7 +3,7 @@ import requests
 import uuid
 import json
 
-ENDPOINT_URL = "https://pz8ly572of.execute-api.us-east-1.amazonaws.com/chat"
+ENDPOINT_URL = "https://ggjtv6yy7d.execute-api.us-east-1.amazonaws.com/stg/chat"
 
 st.title("💬 Chatbot")
 
