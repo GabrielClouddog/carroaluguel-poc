@@ -3,7 +3,11 @@ import requests
 import uuid
 import json
 
-ENDPOINT_URL = "https://e3oekrdm58.execute-api.us-east-1.amazonaws.com/prd/chat/"
+API_KEY = "TQPmJBRoJk3EkDLSyn2AV3krEUXSonC86aUkJQuf"  # Sua chave de API
+HEADERS = {
+    "x-api-key": API_KEY
+}
+ENDPOINT_URL = "https://e3oekrdm58.execute-api.us-east-1.amazonaws.com/prd/chat"
 
 st.title("💬 Chatbot")
 
@@ -54,7 +58,7 @@ if prompt := st.chat_input():
 
     try:
         # Enviar a solicitação para a API
-        response = requests.post(ENDPOINT_URL, json=request_data)
+        response = requests.post(ENDPOINT_URL, headers=HEADERS, json=request_data, )
         print("RESPONSE::: ", response)
         if response.status_code == 200:
             response_data = response.json()
